@@ -23,5 +23,42 @@ def calcShannonEnt(dataSet):
         prob=float(labelCounts[key])/numEntries
         shannonEnt-=prob*log(prob,2)
     return shannonEnt
-    
 
+def splitDataSet(dataSet,axis,value):
+    retDataSet=[]
+    for featVec in dataSet:
+        if featVec[axis]==value:
+            reducedFeatVec=featVec[:axis]
+            reducedFeatVec.extend(featVec[axis+1:])
+            retDataSet.append(reducedFeatVec)
+    return retDataSet
+
+def chooseBestFeatureToSplit(dataSet):
+    #the number of feature attributes that the current data packet contains
+    numFeatures=len(dataSet[0])-1
+
+    # entropy 熵
+    baseEntropy=calcShannonEnt(dataSet)
+
+    bestInfoGain=0.0
+    bestFeature=-1
+
+    for i in range(numFeatures):
+        featList = [example[i] for example in dataSet]
+        uniqueVals=set(featList)
+        newEntropy=0.0
+        for value in uniqueVals:
+            subDataset=splitDataSet(dataSet,i,value)
+            prob=len(subDataset)/float(len(dataSet))
+            newEntropy+=prob*calcShannonEnt(subDataset)
+        infoGain=baseEntropy-newEntropy
+        if(infoGain>bestInfoGain):
+            bestInfoGain=infoGain
+            bestFeature=i
+    return bestFeature
+
+
+
+dataset,labels=createDataSet()
+print(chooseBestFeatureToSplit(dataset))
+print(dataset)
