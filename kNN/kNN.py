@@ -20,7 +20,7 @@ def classify0(inX,dataSet,labels,k):
     for i in range(k):
         vl=labels[sortedDistIndicies[i]]
         classcount[vl]=classcount.get(vl,0)+1
-    sortedclasscount = sorted(classcount.iteritems(),key=operator.itemgetter(1),reverse=True)
+    sortedclasscount = sorted(classcount.items(),key=operator.itemgetter(1),reverse=True)
     return sortedclasscount[0][0]
 
 def file2Matrix(filename):
@@ -60,9 +60,6 @@ def autoNorm(dataSet):
 def normalization():
     dataSet,labels=file2Matrix('datingTestSet2.txt')
     normMat,ranges,minvals=autoNorm(dataSet)
-    print normMat
-    print ranges
-    print minvals
     
 def datingClassTest():
     hoRatio=0.10
@@ -73,12 +70,11 @@ def datingClassTest():
     errorCount=0.0
     for i in range(numTestVecs):
         classifierResult = classify0(normMat[i,:],normMat[numTestVecs:m,:],labels[numTestVecs:m],3)
-        print "the classifier came back with  : %s,the real answer is : %s"%(classifierResult,labels[i])
+        print ("the classifier came back with  : %s,the real answer is : %s"%(classifierResult,labels[i]))
         if(classifierResult != labels[i]):
                 errorCount+=1
-    print "errorCount = %d"%(errorCount)
-    print "the total error rate is %f"%(errorCount/float(numTestVecs))
-
+    print ("errorCount = %d"%(errorCount))
+    print ("the total error rate is %f"%(errorCount/float(numTestVecs)))
 def img2Vector(filename):
     returnVect=zeros((1,1024))
     fr=open(filename)
@@ -109,8 +105,8 @@ def handwritingClassTest():
         classNumStr=int (fileStr.split('_')[0])
         vectorUnderTest = img2Vector('testDigits/%s'%fileNameStr)
         classifierResult=classify0(vectorUnderTest,trainingMat,hwLabels,3)
-        print "the classifier came back with : %d,the real answer is : %d"%(classifierResult,classNumStr)
+        print ("the classifier came back with : %d,the real answer is : %d"%(classifierResult,classNumStr))
         if(classifierResult!=classNumStr):errorCount+=1.0
-    print "\nthe total number of errors is : %d"%errorCount
-    print "\nthe total error rate is : %f "%(errorCount/float(mTest))
+    print ("\nthe total number of errors is : %d"%errorCount)
+    print ("\nthe total error rate is : %f "%(errorCount/float(mTest)))
 

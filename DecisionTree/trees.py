@@ -66,9 +66,22 @@ def majorityCnt(classList):
     sortedClassCount=sorted(classCount.items(),key=operator.itemgetter(1),reverse=True)
     return sortedClassCount[0][0]
 
-
-
-
-dataset,labels=createDataSet()
-print(chooseBestFeatureToSplit(dataset))
-print(dataset)
+def createTree(dataSet,labels):
+    classList=[example[-1] for example in dataSet]
+    #类别完全相同则停止继续划分
+    if classList.count(classList[0]) == len(classList):
+        return classList[0]
+    #遍历完所有特征是返回出现次数最多的类别
+    if len(dataSet[0])==1:
+        return majorityCnt(classList)
+    
+    bestFeat=chooseBestFeatureToSplit(dataSet)
+    bestFeatLabel=labels[bestFeat]
+    mytree={bestFeatLabel:{}}
+    del(labels[bestFeat])
+    featValues=[example[bestFeat] for example in dataSet]
+    uniqueVals=set(featValues)
+    for value in uniqueVals:
+        subLabels=labels[:]
+        mytree[bestFeatLabel][value]=createTree(splitDataSet(dataSet,bestFeat,value),subLabels)
+    return mytree
