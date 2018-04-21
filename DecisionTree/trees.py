@@ -25,6 +25,7 @@ def calcShannonEnt(dataSet):
         shannonEnt-=prob*log(prob,2)
     return shannonEnt
 
+#axis为所选取的用来划分的特征值的下标，value为划分所得数据集中该属性的取值
 def splitDataSet(dataSet,axis,value):
     retDataSet=[]
     for featVec in dataSet:
@@ -87,6 +88,7 @@ def createTree(dataSet,labels):
         mytree[bestFeatLabel][value]=createTree(splitDataSet(dataSet,bestFeat,value),subLabels)
     return mytree
 
+#自顶向下递归遍历
 def classify(inputTree,featlabels,testVec):
     firstStr=next(iter(inputTree))
     secondDict=inputTree[firstStr]

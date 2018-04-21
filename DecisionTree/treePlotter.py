@@ -13,7 +13,6 @@ def plotNode(nodeTxt, centerPt, parentPt, nodeType):
              xytext=centerPt, textcoords='axes fraction',
              va="center", ha="center", bbox=nodeType, arrowprops=arrow_args )
 
-
 # def createPlot():
 #     fig = plt.figure(1, facecolor='white')
 #     fig.clf()
