@@ -1,5 +1,6 @@
 from math import log
 import operator
+import treePlotter as tp
 def createDataSet():
     dataSet = [[1, 1, 'yes'],
                [1, 1, 'yes'],
@@ -86,5 +87,32 @@ def createTree(dataSet,labels):
         mytree[bestFeatLabel][value]=createTree(splitDataSet(dataSet,bestFeat,value),subLabels)
     return mytree
 
-dataset,labels=createDataSet()
-print(createTree(dataset,labels))
+def classify(inputTree,featlabels,testVec):
+    firstStr=next(iter(inputTree))
+    secondDict=inputTree[firstStr]
+    featIndex=featlabels.index(firstStr)
+    for key in secondDict.keys():
+        if testVec[featIndex]==key:
+            if type(secondDict[key]).__name__=='dict':
+                classLabel=classify(secondDict[key],featlabels,testVec)
+            else:
+                classLabel=secondDict[key]
+    return classLabel
+
+def storeTree(inputTree,filename):
+    import pickle
+    with open(filename, 'w') as fw:
+        pickle.dump(inputTree, fw)
+
+def grabTree(filename):
+    import pickle
+    fr=open(filename,'r')
+    return pickle.load(fr)
+
+def lensesClassify():
+    fr=open('lenses.txt','r')
+    lenses=[inst.strip().split('\t') for inst in fr.readlines()]
+    lensesLabels = ['age', 'prescript', 'astigmatic', 'tearRate']
+    lensesTree=createTree(lenses,lensesLabels)
+    tp.createPlot(lensesTree)
+
