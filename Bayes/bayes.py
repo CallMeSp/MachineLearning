@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from numpy import *
 import feedparser
+import operator
 import re
 
 def loadDataSet():
@@ -130,7 +131,61 @@ def spamTest():
             errorCount+=1
     print('the error rate is ',float(errorCount)/len(testSet))
 
+def calcMostFreq(vocabList,fullText):
+    freqDict={}
+    for token in vocabList:
+        freqDict[token]=fullText.count(token)
+    sortedFrq=sorted(freqDict.items(),key=operator.itemgetter(1),reverse=True)
+    return sortedFrq[:7]
+
+def localWords(feed1,feed0):
+    docList=[];classList=[];fullText=[]
+    minLen=min(len(feed1['entries']),len(feed0['entries']))
+    for i in range(minLen):
+
+        wordList=textParse(feed0['entries'][i]['summary'])
+        docList.append(wordList)
+        fullText.extend(wordList)
+        classList.append(0)
+
+        wordList=textParse(feed1['entries'][i]['summary'])
+        docList.append(wordList)
+        fullText.extend(wordList)
+        classList.append(1)
+    vocabList=createVocabList(docList)
+    print(vocabList)
+    # 去掉最高频的几个单词
+    topWords=calcMostFreq(vocabList,fullText)
+    for t in topWords:
+        # 字典中的key
+        if t[0] in vocabList:
+            vocabList.remove(t[0])
+        
+    trainingSet=list(range(2*minLen))
+    testSet=[]
+    for i in range(5):
+        randIndex=int(random.uniform(0,len(trainingSet)))
+        testSet.append(trainingSet[randIndex])
+        del(trainingSet[randIndex])
+    trainingMat=[]
+    trainingClasses=[]
+    for docIndex in trainingSet:
+        trainingMat.append(bagofWords2Vec(vocabList,docList[docIndex]))
+        trainingClasses.append(classList[docIndex])
+    p0v,p1v,pSpam=trainNB0(trainingMat,trainingClasses)
+    errorCount=0
+    for docIndex in testSet:
+        wordVect=bagofWords2Vec(vocabList,docList[docIndex])
+        if classifyNB(wordVect,p0v,p1v,pSpam)!=classList[docIndex]:
+            errorCount+=1
+    print('the err rate is ',float(errorCount)/len(testSet))
+
 if(__name__=='__main__'):
-    ny=feedparser.parse('http://news.163.com/special/00011K6L/rss_newstop.xml') 
+    ny=feedparser.parse('http://losangeles.craigslist.org/tfr/index.rss') 
+    sf=feedparser.parse('http://newyork.craigslist.org/res/index.rss')
     print(len(ny['entries']))
-   
+    print(len(sf['entries']))
+    # for i in range(25):
+    #     print(i,'.: ',ny['entries'][i]['summary'])
+    #     print(i,'.: ',sf['entries'][i]['summary'].replace('<br>',''))
+    localWords(ny,sf)
