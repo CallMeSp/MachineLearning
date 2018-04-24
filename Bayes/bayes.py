@@ -183,9 +183,4 @@ def localWords(feed1,feed0):
 if(__name__=='__main__'):
     ny=feedparser.parse('http://losangeles.craigslist.org/tfr/index.rss') 
     sf=feedparser.parse('http://newyork.craigslist.org/res/index.rss')
-    print(len(ny['entries']))
-    print(len(sf['entries']))
-    # for i in range(25):
-    #     print(i,'.: ',ny['entries'][i]['summary'])
-    #     print(i,'.: ',sf['entries'][i]['summary'].replace('<br>',''))
     localWords(ny,sf)
