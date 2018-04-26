@@ -48,13 +48,30 @@ def plotBestFit(weights):
     ax.scatter(xcord2,ycord2,s=30,c='blue')
     x=arange(-3.0,3.0,0.1)
     y=(-weights[0]-weights[1]*x)/weights[2]
-    print(x,'---',y)
+    # to make x and y's shape be same ,transpost y
     ax.plot(x,y.transpose())
-    plt.xlabel('X1');plt.ylabel('X2中文');
+    plt.xlabel('X1');plt.ylabel('X2');
     plt.show()
+
+def stocGradAscent(dataMatrix,classLabels):
+    m,n=shape(dataMatrix)
+    alpha=0.01
+    weights=ones(n)
+    for i in range(m):
+        print(i)
+        print(dataMatrix[i])
+        print(weights)
+        print(dataMatrix[i]*weights)
+        h=sigmoid(sum(dataMatrix[i]*weights))
+        error=classLabels[i]-h
+        weights=weights*alpha*error*dataMatrix[i]
+    return weights
+
+
+
 
 if(__name__=='__main__'):
     dataArr,labelMat=loadDataSet()
-    weights=gradAscent(dataArr,labelMat)
+    weights=stocGradAscent(dataArr,labelMat)
     print(weights)
     plotBestFit(weights)
