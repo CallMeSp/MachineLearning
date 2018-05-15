@@ -23,6 +23,7 @@ def gradAscent(dataMatIn,classLabels):
     m,n=shape(dataMatrix)
     alepha=0.001
     maxCycles=500
+    # 生成n*1的列向量
     weights=ones((n,1))
     for k in range(maxCycles):
         h=sigmoid(dataMatrix*weights)
@@ -47,6 +48,7 @@ def plotBestFit(weights):
     ax.scatter(xcord1,ycord1,s=30,c='red',marker='s')
     ax.scatter(xcord2,ycord2,s=30,c='blue')
     x=arange(-3.0,3.0,0.1)
+    # 通过解出x1和x2关系得到
     y=(-weights[0]-weights[1]*x)/weights[2]
     # to make x and y's shape be same ,transpost y
     ax.plot(x,y.transpose())
@@ -119,8 +121,8 @@ def multiTest():
     print('after %d iterations the average error rate is %f'%(numTest,errorSum/float(numTest)))
 
 if(__name__=='__main__'):
-    # dataArr,labelMat=loadDataSet()
-    # weights=stocGradAscent1(array(dataArr),labelMat)
-    # print(weights)
-    # plotBestFit(weights)
-    multiTest()
+    dataArr,labelMat=loadDataSet()
+    weights=gradAscent(array(dataArr),labelMat)
+    print(weights)
+    plotBestFit(weights)
+    # multiTest()
