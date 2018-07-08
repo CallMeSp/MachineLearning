@@ -60,6 +60,13 @@ def ridgeRegres(xMat,yMat,lam=0.2):
     ws = denom.I * (xMat.T*yMat)
     return ws
     
+def regularize(xMat):#regularize by columns
+    inMat = xMat.copy()
+    inMeans = mean(inMat,0)   #calc mean then subtract it off
+    inVar = var(inMat,0)      #calc variance of Xi then divide by it
+    inMat = (inMat - inMeans)/inVar
+    return inMat
+    
 def ridgeTest(xArr,yArr):
     xMat = mat(xArr); yMat=mat(yArr).T
     yMean = mean(yMat,0)
