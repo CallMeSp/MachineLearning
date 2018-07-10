@@ -5,7 +5,8 @@ def loadDataSet(filename):
     for line in fr.readlines():
         curLine=line.strip().split('\t')
         fltLine=map(float,curLine) # 将每行映射成浮点数
-        dataMat.append(fltLine)
+        for i in fltLine:
+            dataMat.append(i)
     return dataMat
 
 def binSplitDataSet(dataSet,feature,value):
