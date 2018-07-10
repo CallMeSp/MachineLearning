@@ -49,7 +49,7 @@ def chooseBestSplit(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):
 def createTree(dataSet,leafType=regLeaf,errType=regErr,ops=(1,4)):# errType代表误差计算函数 ops包含树构建所需其他参数的数组
     feat,val=chooseBestSplit(dataSet,leafType,errType,ops)
     if feat==None:
-        return val
+        return val                                                  
     retTree={}
     retTree['spInd']=feat
     retTree['spVal']=val
@@ -58,3 +58,74 @@ def createTree(dataSet,leafType=regLeaf,errType=regErr,ops=(1,4)):# errType代�
     retTree['right']=createTree(rSet,leafType,errType,ops)
     return retTree
 
+def isTree(obj):
+    return (type(obj).__name__=='dict')
+
+def getMean(tree):
+    if isTree(tree['right']): tree['right'] = getMean(tree['right'])
+    if isTree(tree['left']): tree['left'] = getMean(tree['left'])
+    return (tree['left']+tree['right'])/2.0
+    
+def prune(tree, testData):
+    if shape(testData)[0] == 0: return getMean(tree) #if we have no test data collapse the tree
+    if (isTree(tree['right']) or isTree(tree['left'])):#if the branches are not trees try to prune them
+        lSet, rSet = binSplitDataSet(testData, tree['spInd'], tree['spVal'])
+    if isTree(tree['left']): tree['left'] = prune(tree['left'], lSet)
+    if isTree(tree['right']): tree['right'] =  prune(tree['right'], rSet)
+    #if they are now both leafs, see if we can merge them
+    if not isTree(tree['left']) and not isTree(tree['right']):
+        lSet, rSet = binSplitDataSet(testData, tree['spInd'], tree['spVal'])
+        errorNoMerge = sum(power(lSet[:,-1] - tree['left'],2)) +\
+            sum(power(rSet[:,-1] - tree['right'],2))
+        treeMean = (tree['left']+tree['right'])/2.0
+        errorMerge = sum(power(testData[:,-1] - treeMean,2))
+        if errorMerge < errorNoMerge: 
+            print ("merging")
+            return treeMean
+        else: return tree
+    else: return tree
+    
+def linearSolve(dataSet):   #helper function used in two places
+    m,n = shape(dataSet)
+    X = mat(ones((m,n))); Y = mat(ones((m,1)))#create a copy of data with 1 in 0th postion
+    X[:,1:n] = dataSet[:,0:n-1]; Y = dataSet[:,-1]#and strip out Y
+    xTx = X.T*X
+    if linalg.det(xTx) == 0.0:
+        raise NameError('This matrix is singular, cannot do inverse,\n\
+        try increasing the second value of ops')
+    ws = xTx.I * (X.T * Y)
+    return ws,X,Y
+
+def modelLeaf(dataSet):#create linear model and return coeficients
+    ws,X,Y = linearSolve(dataSet)
+    return ws
+
+def modelErr(dataSet):
+    ws,X,Y = linearSolve(dataSet)
+    yHat = X * ws
+    return sum(power(Y - yHat,2))
+
+def regTreeEval(model, inDat):
+    return float(model)
+
+def modelTreeEval(model, inDat):
+    n = shape(inDat)[1]
+    X = mat(ones((1,n+1)))
+    X[:,1:n+1]=inDat
+    return float(X*model)
+
+def treeForeCast(tree, inData, modelEval=regTreeEval):
+    if not isTree(tree): return modelEval(tree, inData)
+    if inData[tree['spInd']] > tree['spVal']:
+        if isTree(tree['left']): return treeForeCast(tree['left'], inData, modelEval)
+        else: return modelEval(tree['left'], inData)
+    else:
+        if isTree(tree['right']): return treeForeCast(tree['right'], inData, modelEval)
+        else: return modelEval(tree['right'], inData)
+        
+def createForeCast(tree, testData, modelEval=regTreeEval):
+    m=len(testData)
+    yHat = mat(zeros((m,1)))
+    for i in range(m):
+        yHat[i,0] = treeForeCast(tree, mat(testData[i]), modelEval)
+    return yHat
