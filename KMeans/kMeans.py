@@ -100,9 +100,9 @@ def massPlaceFind(fileName):
         if retDict['ResultSet']['Error'] == 0:
             lat = float(retDict['ResultSet']['Results'][0]['latitude'])
             lng = float(retDict['ResultSet']['Results'][0]['longitude'])
-            print "%s\t%f\t%f" % (lineArr[0], lat, lng)
+            print( "%s\t%f\t%f" % (lineArr[0], lat, lng))
             fw.write('%s\t%f\t%f\n' % (line, lat, lng))
-        else: print "error fetching"
+        else: print ("error fetching")
         sleep(1)
     fw.close()
     
