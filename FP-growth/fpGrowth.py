@@ -14,6 +14,21 @@ class treeNode:
         for child in self.children.values():
             child.disp(ind+1)
 
+def loadSimpDat():
+    simpDat = [['r', 'z', 'h', 'j', 'p'],
+               ['z', 'y', 'x', 'w', 'v', 'u', 't', 's'],
+               ['z'],
+               ['r', 'x', 'n', 'o', 's'],
+               ['y', 'r', 'x', 'z', 'q', 't', 'p'],
+               ['y', 'z', 'x', 'e', 'q', 's', 't', 'm']]
+    return simpDat
+
+def createInitSet(dataSet):
+    retDict = {}
+    for trans in dataSet:
+        retDict[frozenset(trans)] = 1
+    return retDict
+    
 def updateTree(items, inTree, headerTable, count):
     if items[0] in inTree.children:#check if orderedItems[0] in retTree.children
         inTree.children[items[0]].inc(count) #incrament count
@@ -30,7 +45,7 @@ def updateHeader(nodeToTest, targetNode):   #this version does not use recursion
     while (nodeToTest.nodeLink != None):    #Do not use recursion to traverse a linked list!
         nodeToTest = nodeToTest.nodeLink
     nodeToTest.nodeLink = targetNode
-    
+
 def createTree(dataSet,minSup=1):
         headerTable={}
         for trans in dataSet:
