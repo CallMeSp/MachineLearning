@@ -46,14 +46,6 @@ def showplt():
 def sigmoid(inX):
     return 1.0/(1+exp(-inX))
 
-def classifyVector(inX,weights):
-    prob=sigmoid(sum(inX*weights))
-    if prob>0.5:
-        return 1.0
-    else:
-        return 0.0
-
-
 if __name__=="__main__":
     
     showplt()
