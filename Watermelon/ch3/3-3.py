@@ -22,7 +22,7 @@ def gradAscent(dataMatIn,classLabels):
     labelMat=mat(classLabels).transpose()
     m,n=shape(dataMatrix)
     alpha=0.001
-    maxCycles=10000
+    maxCycles=1000
     weights=ones((n,1))
     for i in range(maxCycles):
         h=sigmoid(dataMatrix*weights)
