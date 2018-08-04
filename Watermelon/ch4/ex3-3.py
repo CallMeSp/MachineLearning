@@ -10,7 +10,7 @@ def getDataSet():
         index=0
         for i in lines:
             LabelSet.append(i.strip().split(',')[-1])
-            temp=[];temp.extend(i.strip().split(',')[:])
+            temp=[];temp.extend(i.strip().split(',')[:-3]);temp.append(float(i.strip().split(',')[-3]));temp.append(float(i.strip().split(',')[-2]));temp.append(i.strip().split(',')[-1])
             DataSet.append(temp)
             index+=1
     return DataSet,array(LabelSet)
@@ -40,10 +40,32 @@ def splitDataSet(dataSet,axis,value):
     return retDataSet
 
 def chooseBestFeatToSplit(dataSet):
-    
+    numFeatures=len(dataSet[0])-1
+    baseEntropy=getEntropy(dataSet)
+    bestInforGain=0.0
+    bestFeature=-1
+    for i in range(numFeatures):
+        newEntropy=0.0
+        #　区分离散值和连续值
+        if isinstance(dataSet[0][i],str):
+            featList=[example[i] for example in dataSet]
+            uniqueVals=set(featList)
+            for value in uniqueVals:
+                subDataSet=splitDataSet(dataSet,i,value)
+                prob=len(subDataSet)/float(len(dataSet))
+                newEntropy+=prob*getEntropy(subDataSet)
+        else:
+            featList=[example[i] for example in dataSet]
+            
+            newEntropy=baseEntropy
+        infoGain=baseEntropy-newEntropy
+        if infoGain>bestInforGain:
+            bestInforGain=infoGain
+            bestFeature=i
+    return bestFeature
+
 if __name__=='__main__':
     dataset,label=getDataSet()
-    print(dataset)
-    print(label)
-    print(getEntropy(dataset))
-    print(splitDataSet(dataset,0,'青绿'))
+    fs=[x[6] for x in dataset]
+
+    print(fs)
