@@ -70,7 +70,6 @@ def chooseBestFeatToSplit(dataSet):
         newEntropy=0.0
         #　区分离散值和连续值
         if isinstance(dataSet[0][i],str):
-            print(i,' is str')
             featList=[example[i] for example in dataSet]
             uniqueVals=set(featList)
             for value in uniqueVals:
@@ -78,7 +77,6 @@ def chooseBestFeatToSplit(dataSet):
                 prob=len(subDataSet)/float(len(dataSet))
                 newEntropy+=prob*getEntropy(subDataSet)
         else:
-            print(i,' is float')
             isFloat=True
             featList=[example[i] for example in dataSet]
             sortedList=sort(featList)
@@ -92,7 +90,6 @@ def chooseBestFeatToSplit(dataSet):
             bestFeature=i
             retBool=isFloat
             retValue=threshValue
-    print(bestFeature,isFloat,threshValue)
     return bestFeature,retBool,retValue
 
 def majorityCnt(classList):
