@@ -4,7 +4,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 def getDataSet():
-    with open('3-3.txt','r') as f:
+    with open('3-3.txt','r',encoding='utf-8') as f:
         lines=f.readlines()
         DataSet=zeros((len(lines),3))
         LabelSet=[]
