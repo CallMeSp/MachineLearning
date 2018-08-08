@@ -5,7 +5,7 @@ from numpy import *
 
 
 def getDataSet():
-    with open('ex4-3.txt','r') as f:
+    with open('ex4-3.txt','r',encoding='utf-8') as f:
         lines=f.readlines()
         DataSet=[]
         LabelSet=[]
