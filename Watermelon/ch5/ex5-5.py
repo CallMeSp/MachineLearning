@@ -35,21 +35,6 @@ def sigmoid(inX):
 def sigmoidDerivative(inX):
     return (sigmoid(inX)*(1-sigmoid(inX)))
 
-# def getOneHotTest():
-#     dataSet,labels=getDataSet()
-#     for i in range(len(dataSet[0])-1):
-#         label0=[x[i] for x in dataSet]
-#         oneH=preprocessing.OneHotEncoder()
-#         oneL=preprocessing.LabelEncoder()
-#         oneL.fit([[temp] for temp in label0])
-#         label0_lableEncoder=oneL.transform([[temp] for temp in label0])
-#         oneH.fit([[temp] for temp in label0_lableEncoder])
-#         lable0_hotEncoder=oneH.transform([[temp] for temp in label0_lableEncoder])
-#         print(label0_lableEncoder)
-#         # print(lable0_hotEncoder.toarray())
-#     return 0
-
-
 # 非向量化版本
 class BP:
     def __init__(self,n_input,n_hidden_layer,n_output,learn_rate,error,n_max_train,value):
