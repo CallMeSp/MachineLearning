@@ -1,3 +1,4 @@
+#!/usr/python3
 from numpy import *
 from sklearn import preprocessing
 from sys import argv
