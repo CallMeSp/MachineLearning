@@ -1,23 +1,19 @@
 import tensorflow as tf
 
-# 创建一个常量 op, 产生一个 1x2 矩阵. 这个 op 被作为一个节点
-# 加到默认图中.
-#
-# 构造器的返回值代表该常量 op 的返回值.
-matrix1 = tf.constant([[3., 3.]])
+g1 = tf.Graph()
+with g1.as_default():
+    v = tf.get_variable("v", [1], initializer = tf.zeros_initializer()) # 设置初始值为0
 
-# 创建另外一个常量 op, 产生一个 2x1 矩阵.
-matrix2 = tf.constant([[2.],[2.]])
+g2 = tf.Graph()
+with g2.as_default():
+    v = tf.get_variable("v", [1], initializer = tf.ones_initializer())  # 设置初始值为1
+    
+with tf.Session(graph = g1) as sess:
+    tf.global_variables_initializer().run()
+    with tf.variable_scope("", reuse=True):
+        print(sess.run(tf.get_variable("v")))
 
-# 创建一个矩阵乘法 matmul op , 把 'matrix1' 和 'matrix2' 作为输入.
-# 返回值 'product' 代表矩阵乘法的结果.
-product = tf.matmul(matrix1, matrix2)
-
-sess=tf.Session()
-
-result = sess.run(product)
-print (result)
-# ==> [[ 12.]]
-
-# 任务完成, 关闭会话.
-sess.close()
+with tf.Session(graph = g2) as sess:
+    tf.global_variables_initializer().run()
+    with tf.variable_scope("", reuse=True):
+        print(sess.run(tf.get_variable("v")))
