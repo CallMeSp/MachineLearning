@@ -13,7 +13,7 @@ a = tf.matmul(x, w1)
 y = tf.matmul(a, w2)
 # 定义损失函数和反向传播算法
 cross_entropy = -tf.reduce_mean(y_ * tf.log(tf.clip_by_value(y, 1e-10, 1.0))
-                                + (1 - y_) * tf.log(tf.clip_by_value(1 - y, 1e-10, 1.0)))
+                                )
 train_step = tf.train.AdamOptimizer(0.001).minimize(cross_entropy)
 
 # 通过随机数生成一个模拟数据集
@@ -30,7 +30,7 @@ with tf.Session() as sess:
     sess.run(init_op)
     print(sess.run(w1))
     print(sess.run(w2))
-    Steps = 500000
+    Steps = 5000
     for i in range(Steps):
         start = (i * batch_size) % dataset_size
         end = min(start+batch_size,dataset_size)
