@@ -118,3 +118,5 @@ def lensesClassify():
     lensesTree=createTree(lenses,lensesLabels)
     tp.createPlot(lensesTree)
 
+lensesClassify()
+
