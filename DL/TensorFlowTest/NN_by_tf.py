@@ -30,7 +30,7 @@ with tf.Session() as sess:
     sess.run(init_op)
     print(sess.run(w1))
     print(sess.run(w2))
-    Steps = 5000
+    Steps = 50000
     for i in range(Steps):
         start = (i * batch_size) % dataset_size
         end = min(start+batch_size,dataset_size)
