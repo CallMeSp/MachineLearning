@@ -390,7 +390,7 @@ def pool_backward(dA, cache, mode="max"):
     assert (dA_prev.shape == A_prev.shape)
 
     return dA_prev
-
+x=1
 
 np.random.seed(1)
 A_prev = np.random.randn(5, 5, 3, 2)
