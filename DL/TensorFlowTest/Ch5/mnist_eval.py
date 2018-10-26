@@ -16,7 +16,6 @@ def evaluate(mnist):
             x: mnist.validation.images,
             y_: mnist.validation.labels
         }
-
         y = mnist_inference.inference(x, None)
         correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
