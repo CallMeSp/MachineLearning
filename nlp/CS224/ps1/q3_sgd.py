@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # Save parameters every a few SGD iterations as fail-safe
 SAVE_PARAMS_EVERY = 5000
 
@@ -7,7 +5,7 @@ import glob
 import random
 import numpy as np
 import os.path as op
-import cPickle as pickle
+import pickle as pickle
 
 
 def load_saved_params():
@@ -36,7 +34,12 @@ def save_params(iter, params):
         pickle.dump(random.getstate(), f)
 
 
-def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
+def sgd(f,
+        x0,
+        step,
+        iterations,
+        postprocessing=None,
+        useSaved=False,
         PRINT_EVERY=10):
     """ Stochastic Gradient Descent
 
@@ -65,7 +68,7 @@ def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
         start_iter, oldx, state = load_saved_params()
         if start_iter > 0:
             x0 = oldx
-            step *= 0.5 ** (start_iter / ANNEAL_EVERY)
+            step *= 0.5**(start_iter / ANNEAL_EVERY)
 
         if state:
             random.setstate(state)
@@ -79,13 +82,15 @@ def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
 
     expcost = None
 
-    for iter in xrange(start_iter + 1, iterations + 1):
+    for iter in range(start_iter + 1, iterations + 1):
         # Don't forget to apply the postprocessing after every iteration!
         # You might want to print the progress every few iterations.
 
         cost = None
         ### YOUR CODE HERE
-        raise NotImplementedError
+        cost, grad = f(x)
+        x -= step * grad
+        postprocessing(x)
         ### END YOUR CODE
 
         if iter % PRINT_EVERY == 0:
@@ -93,7 +98,7 @@ def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
                 expcost = cost
             else:
                 expcost = .95 * expcost + .05 * cost
-            print "iter %d: %f" % (iter, expcost)
+            print("iter %d: %f" % (iter, expcost))
 
         if iter % SAVE_PARAMS_EVERY == 0 and useSaved:
             save_params(iter, x)
@@ -105,22 +110,22 @@ def sgd(f, x0, step, iterations, postprocessing=None, useSaved=False,
 
 
 def sanity_check():
-    quad = lambda x: (np.sum(x ** 2), x * 2)
+    quad = lambda x: (np.sum(x**2), x * 2)
 
-    print "Running sanity checks..."
+    print("Running sanity checks...")
     t1 = sgd(quad, 0.5, 0.01, 1000, PRINT_EVERY=100)
-    print "test 1 result:", t1
+    print("test 1 result:", t1)
     assert abs(t1) <= 1e-6
 
     t2 = sgd(quad, 0.0, 0.01, 1000, PRINT_EVERY=100)
-    print "test 2 result:", t2
+    print("test 2 result:", t2)
     assert abs(t2) <= 1e-6
 
     t3 = sgd(quad, -1.5, 0.01, 1000, PRINT_EVERY=100)
-    print "test 3 result:", t3
+    print("test 3 result:", t3)
     assert abs(t3) <= 1e-6
 
-    print ""
+    print("sucCheck")
 
 
 def your_sanity_checks():
@@ -130,7 +135,7 @@ def your_sanity_checks():
     This function will not be called by the autograder, nor will
     your additional tests be graded.
     """
-    print "Running your sanity checks..."
+    print("Running your sanity checks...")
     ### YOUR CODE HERE
     raise NotImplementedError
     ### END YOUR CODE
@@ -138,4 +143,4 @@ def your_sanity_checks():
 
 if __name__ == "__main__":
     sanity_check()
-    your_sanity_checks()
+    # your_sanity_checks()
