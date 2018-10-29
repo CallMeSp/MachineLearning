@@ -1,5 +1,7 @@
 import tensorflow as tf
 from numpy.random import RandomState
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 batch_size = 8
 # stddev means Standard Deviation
 w1 = tf.Variable(tf.random_normal([2, 3], stddev=1, seed=1))
@@ -15,6 +17,7 @@ train_step = tf.train.AdamOptimizer(0.001).minimize(cross_entropy)
 rdm = RandomState(1)
 dataset_size = 128
 X = rdm.rand(dataset_size, 2)
+print(type(X), X)
 Y = [[int(x1 + x2 < 1)] for (x1, x2) in X]
 print(Y)
 with tf.Session() as sess:
