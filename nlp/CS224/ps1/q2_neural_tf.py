@@ -1,8 +1,5 @@
 import tensorflow as tf
 import numpy as np
-from q1_softmax_tf import softmax
-from q2_sigmoid_tf import sigmoid, sigmoid_grad
-from q2_gradcheck import gradcheck_naive
 import time
 
 
@@ -26,14 +23,6 @@ def forward_backward_prop(data, labels, params, dimensions):
     # Unpack network parameters (do not modify)
     ofs = 0
     Dx, H, Dy = (dimensions[0], dimensions[1], dimensions[2])
-
-    W1 = np.reshape(params[ofs:ofs + Dx * H], (Dx, H))
-    ofs += Dx * H
-    b1 = np.reshape(params[ofs:ofs + H], (1, H))
-    ofs += H
-    W2 = np.reshape(params[ofs:ofs + H * Dy], (H, Dy))
-    ofs += H * Dy
-    b2 = np.reshape(params[ofs:ofs + Dy], (1, Dy))
     # ..................................................
     tfW1 = tf.Variable(tf.random_uniform([Dx, H], minval=0, maxval=1))
     tfb1 = tf.Variable(tf.random_uniform([1, H], minval=0, maxval=1))
