@@ -35,10 +35,10 @@ def forward_backward_prop(data, labels, params, dimensions):
     h = tf.nn.sigmoid(tf.add(tf.matmul(x, tfW1), tfb1))
     y_hat_beforesoftmax = tf.add(tf.matmul(h, tfW2), tfb2)
     cost = tf.reduce_mean(
-        tf.nn.softmax_cross_entropy_with_logits(
+        tf.nn.softmax_cros s_entropy_with_logits(
             labels=y, logits=y_hat_beforesoftmax))
     trainStep = tf.train.GradientDescentOptimizer(0.001).minimize(cost)
-
+    print(tf.get_default_graph().get_operations())
     with tf.Session() as sess:
         init_op = tf.global_variables_initializer()
         sess.run(init_op)
