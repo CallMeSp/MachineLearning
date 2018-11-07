@@ -5,7 +5,9 @@ __pycache__/
 
 # C extensions
 *.so
-
+*.p
+nlp/NJU_NLP_Assignment/Ps1/*.txt
+nlp/NJU_NLP_Assignment/Ps2/*.txt
 # Distribution / packaging
 .Python
 env/
