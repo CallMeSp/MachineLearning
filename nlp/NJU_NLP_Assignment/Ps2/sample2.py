@@ -16,7 +16,7 @@ def getDict():
 
 if __name__ == '__main__':
     getDict()
-    testStr = '幼儿园地节目'
+    testStr = '南京市长江大桥'
     lenth = len(testStr)
     curStart = 0
     curEnd = 1
