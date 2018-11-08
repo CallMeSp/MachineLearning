@@ -23,10 +23,14 @@ def softmax(x):
                   tensor in this problem.
     """
 
-    ### YOUR CODE HERE
-    with tf.Session() as sess:
-        out = sess.run(tf.nn.softmax(x))
-    ### END YOUR CODE
+    # YOUR CODE HERE
+    # x_max = tf.reduce_max(x, 1, keep_dims=True)  # find row-wise maximums
+    # x_sub = tf.subtract(x, x_max)  # subtract maximums
+    # x_exp = tf.exp(x_sub)  # exponentiation
+    # sum_exp = tf.reduce_sum(x_exp, 1, keep_dims=True)  # row-wise sums
+    # out = tf.div(x_exp, sum_exp)
+    out = tf.nn.softmax(x, 1)
+    # END YOUR CODE
 
     return out
 
@@ -55,10 +59,11 @@ def cross_entropy_loss(y, yhat):
                     tensor in the problem.
     """
 
-    ### YOUR CODE HERE
-    ### END YOUR CODE
-
-    return out
+    # YOUR CODE HERE
+    # END YOUR CODE
+    log_yhat = tf.log(yhat)
+    out = -tf.multiply(tf.to_float(y), log_yhat)
+    return tf.reduce_sum(out)
 
 
 def test_softmax_basic():
@@ -104,4 +109,4 @@ def test_cross_entropy_loss_basic():
 
 if __name__ == "__main__":
     test_softmax_basic()
-    # test_cross_entropy_loss_basic()
+    test_cross_entropy_loss_basic()
