@@ -1,11 +1,9 @@
 import tensorflow as tf
 import numpy as np
-import os
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 
 
 def sigmoid(x):
-    x=np.array(x,float)
+    x = np.array(x, float)
     with tf.Session() as sess:
         return sess.run(tf.nn.sigmoid(x))
 
